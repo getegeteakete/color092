@@ -9,6 +9,7 @@ const navLinks = [
   { label: "災害保険", path: "/insurance" },
   { label: "会社概要", path: "/company" },
   { label: "お問い合わせ", path: "/contact" },
+  { label: "AI仮見積もりLP", path: "/lp/ai-estimate" },
 ];
 
 export const Footer = () => {

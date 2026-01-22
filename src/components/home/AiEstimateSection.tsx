@@ -167,6 +167,15 @@ export const AiEstimateSection = () => {
               <ChevronRight className="w-5 h-5" />
             </Link>
           </div>
+          <div className="mt-4">
+            <Link
+              to="/lp/ai-estimate"
+              className="inline-flex items-center gap-2 text-primary hover:text-primary/80 text-sm font-medium transition-colors"
+            >
+              営業用LPページを見る
+              <ChevronRight className="w-4 h-4" />
+            </Link>
+          </div>
         </motion.div>
 
         {/* 注意文 */}

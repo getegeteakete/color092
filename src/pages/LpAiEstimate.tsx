@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Header } from "@/components/layout/Header";
 import { motion } from "framer-motion";
 import {
   Sparkles,
@@ -113,8 +114,9 @@ const trustFactors = [
 const LpAiEstimate = () => {
   return (
     <div className="min-h-screen bg-background">
+      <Header />
       {/* ヒーロー */}
-      <section className="relative min-h-screen flex items-center bg-hero-gradient overflow-hidden">
+      <section className="relative min-h-screen flex items-center bg-hero-gradient overflow-hidden pt-20">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-20 left-10 w-64 h-64 rounded-full bg-pink/10 blur-3xl" />
           <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full bg-accent/10 blur-3xl" />
