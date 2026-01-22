@@ -190,9 +190,19 @@ const Company = () => {
                 initial={{ opacity: 0, x: 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className="bg-muted rounded-3xl h-80 flex items-center justify-center"
+                className="rounded-3xl overflow-hidden shadow-lg h-80"
               >
-                <p className="text-muted-foreground">Google Map</p>
+                <iframe
+                  src="https://www.google.com/maps?q=福岡県福岡市東区和白1丁目1番35号&output=embed"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="株式会社COLORS 所在地"
+                  className="w-full h-full"
+                />
               </motion.div>
             </div>
           </div>
