@@ -38,10 +38,11 @@ export const Footer = () => {
           {/* Company Info */}
           <div>
             <div className="flex items-center gap-2 mb-6">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink to-accent flex items-center justify-center">
-                <span className="text-lg font-bold text-white">C</span>
-              </div>
-              <span className="text-xl font-bold">COLORS</span>
+              <img
+                src="/rogo.png"
+                alt="COLORS ロゴ"
+                className="h-10 w-auto object-contain"
+              />
             </div>
             <p className="text-card/70 text-sm leading-relaxed mb-6">
               福岡県を拠点に、塗装を中心としたリフォームサービスを提供する専門会社です。
@@ -90,7 +91,7 @@ export const Footer = () => {
                 <Phone className="w-5 h-5 mt-0.5 text-pink" />
                 <div>
                   <p className="text-sm text-card/70">お電話でのお問い合わせ</p>
-                  <p className="font-bold">0120-XXX-XXX</p>
+                  <p className="font-bold">090-6120-2995</p>
                 </div>
               </li>
               <li className="flex items-start gap-3">
@@ -104,7 +105,7 @@ export const Footer = () => {
                 <Clock className="w-5 h-5 mt-0.5 text-pink" />
                 <div>
                   <p className="text-sm text-card/70">営業時間</p>
-                  <p className="text-sm">9:00〜18:00（日祝定休）</p>
+                  <p className="text-sm">月〜金 9:00〜17:00</p>
                 </div>
               </li>
             </ul>
@@ -118,9 +119,8 @@ export const Footer = () => {
               <div>
                 <p className="text-sm text-card/70 mb-2">本社所在地</p>
                 <p className="text-sm leading-relaxed">
-                  〒812-0000<br />
-                  福岡県福岡市博多区XX町X-X-X<br />
-                  XXビル 3F
+                  〒811-0202<br />
+                  福岡県福岡市東区和白1丁目1番35号
                 </p>
               </div>
             </div>

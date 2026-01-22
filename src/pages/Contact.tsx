@@ -45,10 +45,20 @@ const Contact = () => {
             >
               <span className="section-label">Contact</span>
               <h1 className="text-4xl md:text-5xl font-bold mt-2 mb-6">お問い合わせ</h1>
-              <p className="text-muted-foreground text-lg">
-                塗装・リフォームに関するご相談、お見積もりは無料です。
-                お気軽にお問い合わせください。
-              </p>
+              <div className="space-y-4 text-muted-foreground">
+                <p className="text-sm font-medium text-primary">
+                  ※営業は一切お断りしております
+                </p>
+                <p className="text-lg">
+                  相見積もりをご希望の方や、まずは話を聞いてみたい、という方も大歓迎です。<br />
+                  お気軽にお問い合わせください。
+                </p>
+                <div className="pt-4 border-t border-border/50">
+                  <p className="font-bold text-foreground mb-2">お電話でお問い合わせ</p>
+                  <p className="text-2xl font-bold text-primary mb-2">TEL. 090-6120-2995</p>
+                  <p className="text-sm">［受付時間］ 月〜金 9:00〜17:00</p>
+                </div>
+              </div>
             </motion.div>
           </div>
         </section>
@@ -72,9 +82,9 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="font-bold mb-1">お電話でのお問い合わせ</h3>
-                      <p className="text-2xl font-bold text-primary">0120-XXX-XXX</p>
+                      <p className="text-2xl font-bold text-primary">090-6120-2995</p>
                       <p className="text-sm text-muted-foreground mt-1">
-                        受付時間：9:00〜18:00（日祝定休）
+                        受付時間：月〜金 9:00〜17:00
                       </p>
                     </div>
                   </div>
@@ -96,8 +106,8 @@ const Contact = () => {
                     <div>
                       <h3 className="font-bold mb-1">所在地</h3>
                       <p className="text-muted-foreground">
-                        〒812-0000<br />
-                        福岡県福岡市博多区XX町X-X-X XXビル 3F
+                        〒811-0202<br />
+                        福岡県福岡市東区和白1丁目1番35号
                       </p>
                     </div>
                   </div>
@@ -108,7 +118,7 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="font-bold mb-1">営業時間</h3>
-                      <p className="text-muted-foreground">9:00〜18:00（日祝定休）</p>
+                      <p className="text-muted-foreground">月〜金 9:00〜17:00</p>
                     </div>
                   </div>
                 </div>

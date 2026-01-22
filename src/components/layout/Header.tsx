@@ -22,17 +22,11 @@ export const Header = () => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <div className="relative">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-pink to-accent flex items-center justify-center">
-                <span className="text-2xl font-bold text-white">C</span>
-              </div>
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-accent rounded-full" />
-              <div className="absolute -bottom-1 -left-1 w-2 h-2 bg-pink rounded-full" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-gradient font-bold text-xl tracking-wider">COLORS</span>
-              <span className="text-[10px] text-muted-foreground">株式会社 COLORS</span>
-            </div>
+            <img
+              src="/rogo.png"
+              alt="COLORS ロゴ"
+              className="h-12 w-auto object-contain"
+            />
           </Link>
 
           {/* Desktop Navigation */}
