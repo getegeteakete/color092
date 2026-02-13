@@ -22,7 +22,7 @@ export const HeroSection = () => {
             className="order-2 lg:order-1"
           >
             <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight mb-6">
-              <span className="whitespace-nowrap">塗り広げるのは</span> <span className="text-gradient whitespace-nowrap">お客様の笑える未来です。</span>
+              塗り広げるのは <span className="text-gradient">お客様の笑える未来です。</span>
             </h1>
             
             <p className="text-lg text-muted-foreground mb-4">

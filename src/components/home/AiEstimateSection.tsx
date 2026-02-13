@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { 
-  Sparkles, 
+  Zap, 
   Camera, 
   Paintbrush, 
   Calendar,
@@ -12,7 +12,7 @@ import {
 
 const featureCards = [
   {
-    icon: Sparkles,
+    icon: Zap,
     title: "AI仮見積診断",
     description: "建物情報を入力するだけで、AIが自動で概算見積もりを算出します。",
   },
