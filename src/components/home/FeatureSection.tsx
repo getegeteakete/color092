@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { Sparkles, Layers, HeartHandshake } from "lucide-react";
 
 const features = [
   {
@@ -27,19 +26,19 @@ const features = [
 
 export const FeatureSection = () => {
   return (
-    <section className="py-24 bg-hero-gradient">
+    <section className="pt-8 md:pt-24 pb-12 md:pb-24 bg-hero-gradient">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-8 md:mb-16"
         >
           <span className="section-label">Feature</span>
           <h2 className="section-title">COLORSの特徴</h2>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-4 md:gap-8">
           {features.map((feature, index) => (
             <motion.div
               key={feature.number}
@@ -47,15 +46,10 @@ export const FeatureSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="group relative bg-card rounded-3xl p-8 shadow-lg card-hover"
+              className="group relative bg-card rounded-3xl p-6 md:p-8 shadow-lg card-hover"
             >
               {/* Number Badge */}
               <div className="number-badge mb-6">{feature.number}</div>
-
-              {/* Icon */}
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-light to-orange-light flex items-center justify-center mb-6">
-                <feature.icon className="w-8 h-8 text-primary" />
-              </div>
 
               {/* Content */}
               <h3 className="text-xl font-bold mb-4">{feature.title}</h3>

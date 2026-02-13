@@ -8,6 +8,7 @@ import { WorksSection } from "@/components/home/WorksSection";
 import { NewsSection } from "@/components/home/NewsSection";
 import { InsuranceSection } from "@/components/home/InsuranceSection";
 import { AiEstimateSection } from "@/components/home/AiEstimateSection";
+import { ExperienceSection } from "@/components/home/ExperienceSection";
 
 const Index = () => {
   return (
@@ -22,6 +23,7 @@ const Index = () => {
         <NewsSection />
         <InsuranceSection />
         <AiEstimateSection />
+        <ExperienceSection />
       </main>
       <Footer />
     </div>

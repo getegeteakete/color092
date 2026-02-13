@@ -24,6 +24,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/lib/supabase";
+import { analyzePhotoDeterioration, calculateAIEstimate } from "@/lib/openai";
+import { Sparkles, Loader2 } from "lucide-react";
 
 type BuildingType = "戸建て" | "アパート" | "店舗";
 type DeteriorationLevel = "軽度" | "中度" | "重度";
@@ -36,6 +38,23 @@ interface FormData {
   workTypes: string[];
   deteriorationLevel: DeteriorationLevel | "";
   photos: File[];
+}
+
+interface PhotoAnalysis {
+  deteriorationLevel: '軽度' | '中度' | '重度';
+  analysis: string;
+  confidence: number;
+}
+
+interface AIEstimate {
+  min: number;
+  max: number;
+  breakdown: {
+    item: string;
+    amount: number;
+    description: string;
+  }[];
+  aiNotes: string;
 }
 
 const STEPS = [
@@ -51,6 +70,11 @@ const Estimate = () => {
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAnalyzingPhotos, setIsAnalyzingPhotos] = useState(false);
+  const [isCalculatingAI, setIsCalculatingAI] = useState(false);
+  const [photoAnalysis, setPhotoAnalysis] = useState<PhotoAnalysis | null>(null);
+  const [aiEstimate, setAiEstimate] = useState<AIEstimate | null>(null);
+  const [useAI, setUseAI] = useState(true); // AI使用フラグ
   const [formData, setFormData] = useState<FormData>({
     buildingType: "",
     buildingAge: "",
@@ -65,8 +89,12 @@ const Estimate = () => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (validateStep(currentStep)) {
+      // STEP 4から5に進む際、AI見積もりを計算
+      if (currentStep === 4 && useAI && import.meta.env.VITE_OPENAI_API_KEY) {
+        await calculateAIEstimateAsync();
+      }
       setCurrentStep((prev) => Math.min(prev + 1, STEPS.length));
     }
   };
@@ -116,6 +144,7 @@ const Estimate = () => {
   };
 
   const calculateEstimate = () => {
+    // 従来の計算ロジック（フォールバック用）
     const basePrice = 3000; // 基本単価（円/㎡）- 外壁塗装を含む
     const floorArea = parseFloat(formData.floorArea) || 0;
     
@@ -148,7 +177,38 @@ const Estimate = () => {
     };
   };
 
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const calculateAIEstimateAsync = async () => {
+    if (!useAI || !import.meta.env.VITE_OPENAI_API_KEY) {
+      return null;
+    }
+
+    setIsCalculatingAI(true);
+    try {
+      const result = await calculateAIEstimate(
+        formData.buildingType,
+        parseInt(formData.buildingAge),
+        parseFloat(formData.floorArea),
+        parseInt(formData.floors),
+        formData.workTypes,
+        formData.deteriorationLevel,
+        photoAnalysis || undefined
+      );
+      setAiEstimate(result);
+      return result;
+    } catch (error: any) {
+      console.error('AI estimate error:', error);
+      toast({
+        title: "AI見積もりエラー",
+        description: error.message || "AI見積もりの計算に失敗しました。従来の計算方法を使用します。",
+        variant: "destructive",
+      });
+      return null;
+    } finally {
+      setIsCalculatingAI(false);
+    }
+  };
+
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     const remainingSlots = 10 - formData.photos.length;
     const filesToAdd = files.slice(0, remainingSlots);
@@ -160,7 +220,36 @@ const Estimate = () => {
       });
     }
     
-    updateFormData("photos", [...formData.photos, ...filesToAdd]);
+    const newPhotos = [...formData.photos, ...filesToAdd];
+    updateFormData("photos", newPhotos);
+    
+    // 写真が追加されたら自動でAI分析を実行（オプション）
+    if (newPhotos.length > 0 && useAI && import.meta.env.VITE_OPENAI_API_KEY) {
+      setIsAnalyzingPhotos(true);
+      try {
+        const analysis = await analyzePhotoDeterioration(newPhotos);
+        setPhotoAnalysis(analysis);
+        
+        // AI分析結果を劣化状況に反映（ユーザーがまだ選択していない場合）
+        if (!formData.deteriorationLevel) {
+          updateFormData("deteriorationLevel", analysis.deteriorationLevel);
+        }
+        
+        toast({
+          title: "写真分析完了",
+          description: `AI分析結果: ${analysis.deteriorationLevel} (信頼度: ${(analysis.confidence * 100).toFixed(0)}%)`,
+        });
+      } catch (error: any) {
+        console.error('Photo analysis error:', error);
+        toast({
+          title: "写真分析エラー",
+          description: error.message || "写真の分析に失敗しました。手動で劣化状況を選択してください。",
+          variant: "destructive",
+        });
+      } finally {
+        setIsAnalyzingPhotos(false);
+      }
+    }
   };
 
   const removePhoto = (index: number) => {
@@ -171,8 +260,10 @@ const Estimate = () => {
     setIsSubmitting(true);
     
     try {
-      // 見積計算
-      const estimate = calculateEstimate();
+      // 見積計算（AI見積もりがあれば使用、なければ従来の計算）
+      const estimate = aiEstimate 
+        ? { min: aiEstimate.min, max: aiEstimate.max }
+        : calculateEstimate();
       
       // 写真をSupabase Storageにアップロード（オプション）
       const photoUrls: string[] = [];
@@ -281,7 +372,10 @@ const Estimate = () => {
     }
   };
 
-  const estimate = currentStep === 5 ? calculateEstimate() : null;
+  // 見積もり結果を取得（AI見積もりがあれば優先、なければ従来の計算）
+  const estimate = currentStep === 5 
+    ? (aiEstimate ? { min: aiEstimate.min, max: aiEstimate.max } : calculateEstimate())
+    : null;
 
   return (
     <div className="min-h-screen">
@@ -481,8 +575,47 @@ const Estimate = () => {
                   {/* STEP 4: 写真アップロード */}
                   {currentStep === 4 && (
                     <div className="space-y-6">
-                      <h2 className="text-2xl font-bold mb-6">写真をアップロードしてください</h2>
-                      <p className="text-muted-foreground mb-6">最大10枚までアップロード可能です（任意）</p>
+                      <div className="flex items-center justify-between mb-6">
+                        <div>
+                          <h2 className="text-2xl font-bold">写真をアップロードしてください</h2>
+                          <p className="text-muted-foreground mt-2">最大10枚までアップロード可能です（任意）</p>
+                        </div>
+                        {import.meta.env.VITE_OPENAI_API_KEY && (
+                          <div className="flex items-center gap-2">
+                            <Sparkles className="w-5 h-5 text-primary" />
+                            <span className="text-sm font-medium">AI分析対応</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* AI分析結果表示 */}
+                      {photoAnalysis && (
+                        <div className="bg-gradient-to-br from-pink/10 to-accent/10 rounded-xl p-4 border border-border">
+                          <div className="flex items-start gap-3">
+                            <Sparkles className="w-5 h-5 text-primary mt-0.5" />
+                            <div className="flex-1">
+                              <h3 className="font-semibold mb-2">AI写真分析結果</h3>
+                              <div className="space-y-2 text-sm">
+                                <div className="flex items-center gap-2">
+                                  <span className="text-muted-foreground">劣化状況:</span>
+                                  <span className="font-medium">{photoAnalysis.deteriorationLevel}</span>
+                                  <span className="text-xs text-muted-foreground">
+                                    (信頼度: {(photoAnalysis.confidence * 100).toFixed(0)}%)
+                                  </span>
+                                </div>
+                                <p className="text-muted-foreground">{photoAnalysis.analysis}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {isAnalyzingPhotos && (
+                        <div className="flex items-center gap-2 text-primary">
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span className="text-sm">AIが写真を分析中...</span>
+                        </div>
+                      )}
                       
                       <div className="space-y-4">
                         {formData.photos.length > 0 && (
@@ -533,45 +666,98 @@ const Estimate = () => {
                   {/* STEP 5: 概算見積 */}
                   {currentStep === 5 && estimate && (
                     <div className="space-y-6">
-                      <h2 className="text-2xl font-bold mb-6">概算見積もり</h2>
-                      
-                      <div className="bg-gradient-to-br from-pink/10 to-accent/10 rounded-3xl p-8 border border-border">
-                        <div className="text-center mb-6">
-                          <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
-                            {estimate.min.toLocaleString()}円
+                      <div className="flex items-center justify-between mb-6">
+                        <h2 className="text-2xl font-bold">概算見積もり</h2>
+                        {aiEstimate && (
+                          <div className="flex items-center gap-2 text-primary">
+                            <Sparkles className="w-5 h-5" />
+                            <span className="text-sm font-medium">AI算出</span>
                           </div>
-                          <div className="text-2xl text-muted-foreground mb-4">〜</div>
-                          <div className="text-4xl md:text-5xl font-bold text-primary mb-4">
-                            {estimate.max.toLocaleString()}円
-                          </div>
-                          <p className="text-sm text-muted-foreground">（税込）</p>
-                        </div>
-                        
-                        <div className="space-y-3 mt-8 pt-8 border-t border-border">
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">建物種別</span>
-                            <span className="font-medium">{formData.buildingType}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">延床面積</span>
-                            <span className="font-medium">{formData.floorArea}㎡</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">施工内容</span>
-                            <span className="font-medium">{formData.workTypes.join("、")}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">劣化状況</span>
-                            <span className="font-medium">{formData.deteriorationLevel}</span>
-                          </div>
-                        </div>
-                        
-                        <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
-                          <p className="text-sm text-muted-foreground">
-                            ※この見積もりは仮見積もりです。実際の金額は現地調査後に確定します。
-                          </p>
-                        </div>
+                        )}
                       </div>
+
+                      {isCalculatingAI ? (
+                        <div className="flex flex-col items-center justify-center py-12">
+                          <Loader2 className="w-8 h-8 animate-spin text-primary mb-4" />
+                          <p className="text-muted-foreground">AIが詳細な見積もりを計算中...</p>
+                        </div>
+                      ) : (
+                        <div className="bg-gradient-to-br from-pink/10 to-accent/10 rounded-3xl p-8 border border-border">
+                          <div className="text-center mb-6">
+                            <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
+                              {estimate.min.toLocaleString()}円
+                            </div>
+                            <div className="text-2xl text-muted-foreground mb-4">〜</div>
+                            <div className="text-4xl md:text-5xl font-bold text-primary mb-4">
+                              {estimate.max.toLocaleString()}円
+                            </div>
+                            <p className="text-sm text-muted-foreground">（税込）</p>
+                          </div>
+
+                          {/* AI見積もりの内訳 */}
+                          {aiEstimate && aiEstimate.breakdown.length > 0 && (
+                            <div className="space-y-3 mt-8 pt-8 border-t border-border">
+                              <h3 className="font-semibold mb-4">見積もり内訳</h3>
+                              {aiEstimate.breakdown.map((item, index) => (
+                                <div key={index} className="flex justify-between items-start">
+                                  <div className="flex-1">
+                                    <span className="font-medium">{item.item}</span>
+                                    {item.description && (
+                                      <p className="text-xs text-muted-foreground mt-1">{item.description}</p>
+                                    )}
+                                  </div>
+                                  <span className="font-medium ml-4">{item.amount.toLocaleString()}円</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                          
+                          <div className="space-y-3 mt-8 pt-8 border-t border-border">
+                            <div className="flex justify-between">
+                              <span className="text-muted-foreground">建物種別</span>
+                              <span className="font-medium">{formData.buildingType}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-muted-foreground">延床面積</span>
+                              <span className="font-medium">{formData.floorArea}㎡</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-muted-foreground">施工内容</span>
+                              <span className="font-medium">{formData.workTypes.join("、")}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-muted-foreground">劣化状況</span>
+                              <span className="font-medium">
+                                {formData.deteriorationLevel}
+                                {photoAnalysis && (
+                                  <span className="text-xs text-muted-foreground ml-2">
+                                    (AI分析: {photoAnalysis.deteriorationLevel})
+                                  </span>
+                                )}
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* AIからの補足説明 */}
+                          {aiEstimate && aiEstimate.aiNotes && (
+                            <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                              <div className="flex items-start gap-2">
+                                <Sparkles className="w-4 h-4 text-primary mt-0.5" />
+                                <div>
+                                  <p className="text-sm font-medium mb-1">AIからの補足説明</p>
+                                  <p className="text-sm text-muted-foreground">{aiEstimate.aiNotes}</p>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                          
+                          <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                            <p className="text-sm text-muted-foreground">
+                              ※この見積もりは仮見積もりです。実際の金額は現地調査後に確定します。
+                            </p>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                 </motion.div>

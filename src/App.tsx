@@ -18,6 +18,11 @@ import LpAiEstimate from "./pages/LpAiEstimate";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminList from "./pages/admin/AdminList";
+import AdminDetail from "./pages/admin/AdminDetail";
+import ProtectedRoute from "./components/admin/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +53,32 @@ const AppRoutes = () => (
       <Route path="/lp/ai-estimate" element={<LpAiEstimate />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
+      {/* 管理画面 */}
+      <Route path="/admin" element={<AdminLogin />} />
+      <Route
+        path="/admin/dashboard"
+        element={
+          <ProtectedRoute>
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/list"
+        element={
+          <ProtectedRoute>
+            <AdminList />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/detail/:id"
+        element={
+          <ProtectedRoute>
+            <AdminDetail />
+          </ProtectedRoute>
+        }
+      />
       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
       <Route path="*" element={<NotFound />} />
     </Routes>

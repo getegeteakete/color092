@@ -21,10 +21,8 @@ export const HeroSection = () => {
             transition={{ duration: 0.8 }}
             className="order-2 lg:order-1"
           >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-              塗り広げるのは
-              <br />
-              <span className="text-gradient">お客様の笑える未来です。</span>
+            <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight mb-6">
+              <span className="whitespace-nowrap">塗り広げるのは</span> <span className="text-gradient whitespace-nowrap">お客様の笑える未来です。</span>
             </h1>
             
             <p className="text-lg text-muted-foreground mb-4">
@@ -65,23 +63,6 @@ export const HeroSection = () => {
                 alt="COLORS 塗装作業風景"
                 className="relative rounded-3xl shadow-2xl w-full h-auto object-cover"
               />
-              {/* Floating Badge */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.8 }}
-                className="absolute -bottom-6 -left-6 bg-card rounded-2xl shadow-xl p-4"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-pink to-accent flex items-center justify-center">
-                    <span className="text-white font-bold text-lg">10+</span>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">実績年数</p>
-                    <p className="font-bold text-foreground">年以上の経験</p>
-                  </div>
-                </div>
-              </motion.div>
             </div>
           </motion.div>
         </div>
