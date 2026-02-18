@@ -429,13 +429,19 @@
     transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1);
     opacity: 0;
     transform: translateY(60px) scale(0.9);
-    filter: blur(0.5px);
+    filter: blur(0.3px);
   }
 
   .paint.show {
-    opacity: 0.55;
+    opacity: 0.75;
     transform: translateY(0) scale(1);
     animation: floatPaint 6s ease-in-out infinite;
+  }
+  
+  /* 左上ペンキをより明るく（黄色） */
+  .paint-top-left.show {
+    opacity: 0.9;
+    filter: blur(0.2px);
   }
 
   .paint-top-left {
