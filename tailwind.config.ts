@@ -72,6 +72,37 @@ export default {
           DEFAULT: "hsl(var(--teal))",
           foreground: "hsl(var(--teal-foreground))",
         },
+        /* 6色のアクセントカラー */
+        accent1: {
+          DEFAULT: "hsl(var(--accent-1))",
+          soft: "hsl(var(--accent-1-soft))",
+          gradient: "hsl(var(--accent-1-gradient))",
+        },
+        accent2: {
+          DEFAULT: "hsl(var(--accent-2))",
+          soft: "hsl(var(--accent-2-soft))",
+          gradient: "hsl(var(--accent-2-gradient))",
+        },
+        accent3: {
+          DEFAULT: "hsl(var(--accent-3))",
+          soft: "hsl(var(--accent-3-soft))",
+          gradient: "hsl(var(--accent-3-gradient))",
+        },
+        accent4: {
+          DEFAULT: "hsl(var(--accent-4))",
+          soft: "hsl(var(--accent-4-soft))",
+          gradient: "hsl(var(--accent-4-gradient))",
+        },
+        accent5: {
+          DEFAULT: "hsl(var(--accent-5))",
+          soft: "hsl(var(--accent-5-soft))",
+          gradient: "hsl(var(--accent-5-gradient))",
+        },
+        accent6: {
+          DEFAULT: "hsl(var(--accent-6))",
+          soft: "hsl(var(--accent-6-soft))",
+          gradient: "hsl(var(--accent-6-gradient))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

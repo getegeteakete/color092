@@ -24,6 +24,8 @@ import AdminList from "./pages/admin/AdminList";
 import AdminDetail from "./pages/admin/AdminDetail";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 import ErrorBoundary from "./components/ErrorBoundary";
+import { PaintDecoration } from "@/components/ui/PaintDecoration";
+import { BrandSide } from "@/components/layout/BrandSide";
 
 const queryClient = new QueryClient();
 
@@ -94,6 +96,10 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          {/* ペンキスプラッシュ装飾（全ページ共通） */}
+          <PaintDecoration />
+          {/* ブランドロゴサイドバー（全ページ共通） */}
+          <BrandSide />
           <AppRoutes />
         </BrowserRouter>
       </TooltipProvider>

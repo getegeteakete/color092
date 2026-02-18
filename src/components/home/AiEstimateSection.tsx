@@ -9,6 +9,8 @@ import {
   CheckCircle2,
   ArrowRight
 } from "lucide-react";
+import { RainbowRingCard } from "@/components/ui/rainbow-ring-card";
+import { GradientDivider } from "@/components/ui/gradient-divider";
 
 const featureCards = [
   {
@@ -75,7 +77,7 @@ export const AiEstimateSection = () => {
         >
           <span className="section-label">AI Estimate</span>
           <h2 className="section-title mb-4">
-            AI仮見積もり・現地調査予約システム
+            <span className="text-gradient">AI仮見積もり</span>・現地調査予約システム
           </h2>
           <p className="text-muted-foreground text-lg max-w-3xl mx-auto leading-relaxed">
             お問い合わせ前に、まずはAIで概算を。<br />
@@ -85,30 +87,44 @@ export const AiEstimateSection = () => {
 
         {/* 機能紹介カード */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
-          {featureCards.map((card, index) => (
-            <motion.div
-              key={card.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="group relative bg-card rounded-3xl p-6 shadow-lg card-hover border border-border"
-            >
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-light to-orange-light flex items-center justify-center mb-4">
-                <card.icon className="w-7 h-7 text-primary" />
-              </div>
-              <h3 className="text-lg font-bold mb-2">{card.title}</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                {card.description}
-              </p>
-              {card.comingSoon && (
-                <span className="inline-block mt-3 text-xs px-3 py-1 rounded-full bg-muted text-muted-foreground">
-                  準備中
-                </span>
-              )}
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-pink/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-            </motion.div>
-          ))}
+          {featureCards.map((card, index) => {
+            const accentIndex = index % 6;
+            const accentNum = accentIndex + 1;
+            return (
+              <motion.div
+                key={card.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <RainbowRingCard className="p-6 shadow-lg">
+                  <div 
+                    className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4"
+                    style={{
+                      background: `linear-gradient(135deg, hsl(var(--accent-${accentNum}-soft)), hsl(var(--accent-${accentNum})))`,
+                    }}
+                  >
+                    <card.icon 
+                      className="w-7 h-7"
+                      style={{
+                        color: `hsl(var(--accent-${accentNum}))`,
+                      }}
+                    />
+                  </div>
+                  <h3 className="text-lg font-bold mb-2">{card.title}</h3>
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    {card.description}
+                  </p>
+                  {card.comingSoon && (
+                    <span className="inline-block mt-3 text-xs px-3 py-1 rounded-full bg-muted text-muted-foreground">
+                      準備中
+                    </span>
+                  )}
+                </RainbowRingCard>
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* 利用の流れ（STEP UI） */}
@@ -130,14 +146,26 @@ export const AiEstimateSection = () => {
                   className="w-full md:w-auto"
                 >
                   <div className="bg-card rounded-2xl p-6 shadow-md border border-border text-center h-full">
-                    <div className="number-badge mb-4 mx-auto">{step.number}</div>
+                    <div 
+                      className="inline-flex items-center justify-center w-12 h-12 rounded-full text-lg font-bold text-white mb-4 mx-auto"
+                      style={{
+                        background: `linear-gradient(135deg, hsl(var(--accent-${(index % 6) + 1})), hsl(var(--accent-${(index % 6) + 1}-gradient)))`,
+                      }}
+                    >
+                      {step.number}
+                    </div>
                     <h4 className="text-base font-bold mb-2">{step.title}</h4>
                     <p className="text-xs text-muted-foreground">{step.description}</p>
                   </div>
                 </motion.div>
                 {/* 矢印（最後以外、PC表示のみ） */}
                 {index < steps.length - 1 && (
-                  <ArrowRight className="hidden md:block w-6 h-6 text-primary flex-shrink-0 mx-2" />
+                  <ArrowRight 
+                    className="hidden md:block w-6 h-6 flex-shrink-0 mx-2"
+                    style={{
+                      color: `hsl(var(--accent-${(index % 6) + 1}))`,
+                    }}
+                  />
                 )}
               </div>
             ))}
@@ -187,15 +215,24 @@ export const AiEstimateSection = () => {
         >
           <div className="inline-flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-primary" />
+              <CheckCircle2 
+                className="w-4 h-4"
+                style={{ color: "hsl(var(--accent-1))" }}
+              />
               <span>無料で利用可能</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-primary" />
+              <CheckCircle2 
+                className="w-4 h-4"
+                style={{ color: "hsl(var(--accent-3))" }}
+              />
               <span>しつこい営業なし</span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-primary" />
+              <CheckCircle2 
+                className="w-4 h-4"
+                style={{ color: "hsl(var(--accent-5))" }}
+              />
               <span>仮見積は目安です</span>
             </div>
           </div>

@@ -5,12 +5,13 @@
 @tailwind utilities;
 
 /* COLORS塗装会社 - デザインシステム
-   温かみのあるピンク〜オレンジグラデーションが特徴
+   上品な多色（Premium Colorful）をテーマにしたデザイン
+   6色のアクセントカラーで「色とりどり」を表現
 */
 
 @layer base {
   :root {
-    /* 基本色 - 柔らかいクリーム/ピンク系背景 */
+    /* 基本色 - 柔らかいクリーム/ピンク系背景（維持） */
     --background: 20 60% 98%;
     --foreground: 240 20% 20%;
 
@@ -22,8 +23,8 @@
     --popover: 0 0% 100%;
     --popover-foreground: 240 20% 20%;
 
-    /* プライマリ - ピンク〜オレンジグラデーション用 */
-    --primary: 340 80% 60%;
+    /* プライマリ - 多色グラデーション用（6色の平均的な色） */
+    --primary: 340 70% 60%;
     --primary-foreground: 0 0% 100%;
 
     /* セカンダリ - 柔らかいピンク */
@@ -34,25 +35,70 @@
     --muted: 220 15% 95%;
     --muted-foreground: 220 10% 45%;
 
-    /* アクセント - オレンジ */
-    --accent: 25 95% 55%;
+    /* アクセント - オレンジ（後方互換性のため維持） */
+    --accent: 40 85% 60%;
     --accent-foreground: 0 0% 100%;
 
-    /* グラデーション色 */
-    --gradient-start: 340 80% 65%;
-    --gradient-mid: 15 90% 60%;
-    --gradient-end: 45 95% 55%;
+    /* ============================================
+       6色のアクセントカラーパレット
+       Premium Colorful Theme
+       ============================================ */
+    
+    /* Accent 1: Cyan（シアン）- 清潔感・信頼感 */
+    --accent-1: 190 70% 55%;
+    --accent-1-soft: 190 40% 96%;
+    --accent-1-gradient: 190 70% 65%;
 
-    /* ピンク系アクセント */
-    --pink: 350 85% 70%;
-    --pink-light: 350 60% 95%;
+    /* Accent 2: Blue（ブルー）- 信頼感・安定感 */
+    --accent-2: 210 70% 55%;
+    --accent-2-soft: 210 40% 96%;
+    --accent-2-gradient: 210 70% 65%;
 
-    /* オレンジ系 */
-    --orange: 25 95% 55%;
-    --orange-light: 25 80% 95%;
+    /* Accent 3: Violet（バイオレット）- 上品さ・創造性 */
+    --accent-3: 270 60% 60%;
+    --accent-3-soft: 270 35% 96%;
+    --accent-3-gradient: 270 60% 70%;
 
-    /* ティール/シアン - コントラスト用 */
-    --teal: 175 70% 45%;
+    /* Accent 4: Pink（ピンク）- 温かみ・親しみやすさ */
+    --accent-4: 340 70% 65%;
+    --accent-4-soft: 340 40% 96%;
+    --accent-4-gradient: 340 70% 75%;
+
+    /* Accent 5: Amber（アンバー）- 活力・エネルギー */
+    --accent-5: 40 85% 60%;
+    --accent-5-soft: 40 50% 96%;
+    --accent-5-gradient: 40 85% 70%;
+
+    /* Accent 6: Emerald（エメラルド）- 自然・成長 */
+    --accent-6: 150 60% 50%;
+    --accent-6-soft: 150 35% 96%;
+    --accent-6-gradient: 150 60% 60%;
+
+    /* 多色グラデーション（6色を順番に） */
+    --gradient-multicolor: linear-gradient(135deg,
+      hsl(var(--accent-1-gradient)),
+      hsl(var(--accent-2-gradient)),
+      hsl(var(--accent-3-gradient)),
+      hsl(var(--accent-4-gradient)),
+      hsl(var(--accent-5-gradient)),
+      hsl(var(--accent-6-gradient))
+    );
+
+    /* 後方互換性のための既存変数（グラデーション色） */
+    --gradient-start: 340 70% 65%;
+    --gradient-mid: 210 70% 65%;
+    --gradient-end: 40 85% 70%;
+
+    /* ピンク系アクセント（後方互換性） */
+    --pink: 340 70% 65%;
+    --pink-light: 340 40% 96%;
+
+    /* オレンジ系（後方互換性） */
+    --orange: 40 85% 60%;
+    --orange-light: 40 50% 96%;
+
+    /* ティール/シアン（後方互換性） */
+    --teal: 190 70% 55%;
     --teal-foreground: 0 0% 100%;
 
     /* UI要素 */
@@ -61,19 +107,19 @@
 
     --border: 20 30% 90%;
     --input: 20 30% 90%;
-    --ring: 340 80% 60%;
+    --ring: 340 70% 60%;
 
     --radius: 0.75rem;
 
     /* サイドバー */
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 340 80% 60%;
+    --sidebar-primary: 340 70% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 350 60% 95%;
     --sidebar-accent-foreground: 340 60% 40%;
     --sidebar-border: 20 30% 90%;
-    --sidebar-ring: 340 80% 60%;
+    --sidebar-ring: 340 70% 60%;
   }
 }
 
@@ -89,6 +135,13 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Noto Sans JP', sans-serif;
+    position: relative;
+    z-index: 1;
+  }
+  
+  main {
+    position: relative;
+    z-index: 1;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -97,43 +150,138 @@
 }
 
 @layer components {
-  /* グラデーションボタン */
+  /* グラデーションボタン（多色） */
   .btn-gradient {
     @apply relative overflow-hidden rounded-full px-8 py-4 font-medium text-white transition-all duration-300;
-    background: linear-gradient(135deg, hsl(var(--gradient-start)), hsl(var(--gradient-mid)), hsl(var(--gradient-end)));
+    background: linear-gradient(135deg, 
+      hsl(var(--accent-1)), 
+      hsl(var(--accent-2)), 
+      hsl(var(--accent-3)), 
+      hsl(var(--accent-4)), 
+      hsl(var(--accent-5)), 
+      hsl(var(--accent-6))
+    );
     background-size: 200% 200%;
     animation: gradient-shift 3s ease infinite;
   }
 
   .btn-gradient:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 40px -10px hsl(var(--primary) / 0.5);
+    box-shadow: 0 10px 40px -10px hsl(var(--accent-4) / 0.5);
   }
 
-  /* グラデーションテキスト */
+  /* グラデーションテキスト（多色） */
   .text-gradient {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(var(--gradient-start)), hsl(var(--gradient-mid)), hsl(var(--gradient-end)));
+    background-image: linear-gradient(135deg, 
+      hsl(var(--accent-1)), 
+      hsl(var(--accent-2)), 
+      hsl(var(--accent-3)), 
+      hsl(var(--accent-4)), 
+      hsl(var(--accent-5)), 
+      hsl(var(--accent-6))
+    );
+  }
+  
+  /* 多色グラデーションテキスト（回転） */
+  .text-gradient-rainbow {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, 
+      hsl(var(--accent-1)), 
+      hsl(var(--accent-2)), 
+      hsl(var(--accent-3)), 
+      hsl(var(--accent-4)), 
+      hsl(var(--accent-5)), 
+      hsl(var(--accent-6))
+    );
+    background-size: 200% 200%;
+    animation: gradient-shift 3s ease infinite;
   }
 
   /* セクションタイトル */
   .section-label {
     @apply text-sm font-medium tracking-widest uppercase;
-    color: hsl(var(--primary));
+    background: linear-gradient(135deg, 
+      hsl(var(--accent-1)), 
+      hsl(var(--accent-2)), 
+      hsl(var(--accent-3)), 
+      hsl(var(--accent-4)), 
+      hsl(var(--accent-5)), 
+      hsl(var(--accent-6))
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
   .section-title {
     @apply text-3xl md:text-4xl font-bold mt-2;
+    position: relative;
+    padding-bottom: 0.5rem;
+  }
+  
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(to right, 
+      hsl(var(--accent-1)), 
+      hsl(var(--accent-2)), 
+      hsl(var(--accent-3)), 
+      hsl(var(--accent-4)), 
+      hsl(var(--accent-5)), 
+      hsl(var(--accent-6))
+    );
+    border-radius: 2px;
   }
 
-  /* カードホバーエフェクト */
+  /* カードホバーエフェクト（多色シャドウ） */
   .card-hover {
     @apply transition-all duration-300;
   }
 
   .card-hover:hover {
     transform: translateY(-8px);
-    box-shadow: 0 20px 60px -15px hsl(var(--primary) / 0.15);
+    box-shadow: 
+      0 20px 60px -15px hsl(var(--accent-1) / 0.1),
+      0 20px 60px -15px hsl(var(--accent-2) / 0.08),
+      0 20px 60px -15px hsl(var(--accent-3) / 0.08),
+      0 20px 60px -15px hsl(var(--accent-4) / 0.1),
+      0 20px 60px -15px hsl(var(--accent-5) / 0.08),
+      0 20px 60px -15px hsl(var(--accent-6) / 0.08);
+  }
+  
+  /* 虹色リング（カード用） */
+  .rainbow-ring {
+    position: relative;
+  }
+  
+  .rainbow-ring::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    padding: 2px;
+    background: linear-gradient(135deg, 
+      hsl(var(--accent-1)), 
+      hsl(var(--accent-2)), 
+      hsl(var(--accent-3)), 
+      hsl(var(--accent-4)), 
+      hsl(var(--accent-5)), 
+      hsl(var(--accent-6))
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .rainbow-ring:hover::before {
+    opacity: 1;
   }
 
   /* 番号バッジ */
@@ -145,11 +293,13 @@
 }
 
 @layer utilities {
-  /* グラデーション背景 */
+  /* グラデーション背景（多色の淡いグロウ） */
   .bg-hero-gradient {
     background: linear-gradient(135deg, 
       hsl(20 60% 98%) 0%, 
-      hsl(350 60% 97%) 50%, 
+      hsl(var(--accent-1-soft)) 25%,
+      hsl(var(--accent-3-soft)) 50%,
+      hsl(var(--accent-5-soft)) 75%,
       hsl(20 60% 98%) 100%
     );
   }
@@ -157,7 +307,8 @@
   .bg-section-gradient {
     background: linear-gradient(180deg,
       hsl(0 0% 100%) 0%,
-      hsl(350 60% 98%) 100%
+      hsl(var(--accent-2-soft)) 50%,
+      hsl(var(--accent-4-soft)) 100%
     );
   }
 
@@ -187,5 +338,163 @@
   /* スクロールスナップ */
   .snap-section {
     scroll-snap-align: start;
+  }
+
+  /* ============================================
+     ペンキスプラッシュ装飾レイヤー
+     ============================================ */
+  .paint-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .paint {
+    position: absolute;
+    opacity: 0.25;
+    filter: blur(2px);
+  }
+
+  .paint.top-left {
+    top: -80px;
+    left: -60px;
+    transform: rotate(-15deg);
+  }
+
+  .paint.bottom-right {
+    bottom: -100px;
+    right: -70px;
+    transform: rotate(20deg);
+  }
+
+  .paint.bottom-left {
+    bottom: -50px;
+    left: -40px;
+    transform: rotate(10deg);
+  }
+
+  .paint.top-right {
+    top: -60px;
+    right: -50px;
+    transform: rotate(-10deg);
+  }
+
+  .paint.center-bottom {
+    bottom: -60px;
+    left: 50%;
+    transform: translateX(-50%) rotate(5deg);
+  }
+
+  .paint.small {
+    opacity: 0.15;
+    transform: scale(0.6);
+  }
+
+  .paint.small.bottom-left {
+    transform: scale(0.6) rotate(10deg);
+  }
+
+  .paint.small.center-bottom {
+    transform: translateX(-50%) scale(0.6) rotate(5deg);
+  }
+
+  /* スマホ最適化 */
+  @media (max-width: 768px) {
+    .paint {
+      transform: scale(0.7);
+      opacity: 0.18;
+    }
+
+    .paint.top-left {
+      transform: scale(0.7) rotate(-15deg);
+    }
+
+    .paint.bottom-right {
+      transform: scale(0.7) rotate(20deg);
+    }
+
+    .paint.bottom-left {
+      transform: scale(0.7) rotate(10deg);
+    }
+
+    .paint.top-right {
+      transform: scale(0.7) rotate(-10deg);
+    }
+
+    .paint.center-bottom {
+      transform: translateX(-50%) scale(0.7) rotate(5deg);
+    }
+
+    .paint.small {
+      transform: scale(0.42);
+      opacity: 0.12;
+    }
+
+    .paint.small.bottom-left {
+      transform: scale(0.42) rotate(10deg);
+    }
+
+    .paint.small.center-bottom {
+      transform: translateX(-50%) scale(0.42) rotate(5deg);
+    }
+  }
+
+  /* ============================================
+     ブランドロゴサイドバー
+     ============================================ */
+  .brand-side {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 120px;
+    height: 120px;
+    background: hsl(var(--card));
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 60;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .brand-side:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  }
+
+  .brand-side-logo {
+    width: 80%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  /* ヘッダーの左マージン調整（PC） */
+  .header-inner {
+    margin-left: 140px;
+  }
+
+  /* スマホ対応 */
+  @media (max-width: 768px) {
+    .brand-side {
+      position: relative;
+      top: auto;
+      left: auto;
+      width: 70px;
+      height: 70px;
+      margin: 20px auto 10px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+      border-radius: 12px;
+    }
+
+    .brand-side:hover {
+      transform: none;
+    }
+
+    .header-inner {
+      margin-left: 0;
+    }
   }
 }

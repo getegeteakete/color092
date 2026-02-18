@@ -1,4 +1,6 @@
 import { motion } from "framer-motion";
+import { RainbowRingCard } from "@/components/ui/rainbow-ring-card";
+import { getAccentColorClass } from "@/lib/color-utils";
 
 const features = [
   {
@@ -32,7 +34,9 @@ export const FeatureSection = () => {
           className="text-center mb-8 md:mb-16"
         >
           <span className="section-label">Feature</span>
-          <h2 className="section-title">COLORSの特徴</h2>
+          <h2 className="section-title">
+            <span className="text-gradient">COLORS</span>の特徴
+          </h2>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-4 md:gap-8">
@@ -43,19 +47,32 @@ export const FeatureSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="group relative bg-card rounded-3xl p-6 md:p-8 shadow-lg card-hover"
             >
-              {/* Number Badge */}
-              <div className="number-badge mb-6">{feature.number}</div>
+              <RainbowRingCard className="p-6 md:p-8 shadow-lg">
+                {/* Number Badge - 色分け */}
+                <div 
+                  className="inline-flex items-center justify-center w-12 h-12 rounded-full text-lg font-bold text-white mb-6"
+                  style={{
+                    background: `linear-gradient(135deg, hsl(var(--accent-${index + 1})), hsl(var(--accent-${index + 1}-gradient)))`,
+                  }}
+                >
+                  {feature.number}
+                </div>
 
-              {/* Content */}
-              <h3 className="text-xl font-bold mb-4">{feature.title}</h3>
-              <p className="text-muted-foreground leading-relaxed text-sm">
-                {feature.description}
-              </p>
+                {/* Content */}
+                <h3 className="text-xl font-bold mb-4">{feature.title}</h3>
+                <p className="text-muted-foreground leading-relaxed text-sm">
+                  {feature.description}
+                </p>
 
-              {/* Hover Effect */}
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-pink/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                {/* Hover Effect - 多色グロウ */}
+                <div 
+                  className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+                  style={{
+                    background: `linear-gradient(135deg, hsl(var(--accent-${index + 1}-soft)), hsl(var(--accent-${(index + 1) % 6 + 1}-soft)))`,
+                  }}
+                />
+              </RainbowRingCard>
             </motion.div>
           ))}
         </div>

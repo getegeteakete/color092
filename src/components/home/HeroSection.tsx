@@ -2,14 +2,15 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ChevronRight, ChevronDown } from "lucide-react";
 import heroPainting from "@/assets/hero-painting.jpg";
+import { ColorGlow } from "@/components/ui/color-glow";
 
 export const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center bg-hero-gradient overflow-hidden">
-      {/* Background Decorations */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-20 left-10 w-64 h-64 rounded-full bg-pink/10 blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full bg-accent/10 blur-3xl" />
+      {/* Background Decorations - 多色グロウ */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <ColorGlow intensity="light" size="xl" className="top-0 left-0" />
+        <ColorGlow intensity="light" size="lg" className="bottom-0 right-0" />
       </div>
 
       <div className="container mx-auto px-4 pt-24 pb-12">
@@ -36,13 +37,25 @@ export const HeroSection = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="/contact" className="btn-gradient inline-flex items-center justify-center gap-2">
+              <Link to="/contact" className="btn-gradient inline-flex items-center justify-center gap-2 hover:scale-105 transition-transform">
                 お問い合わせ
                 <ChevronRight className="w-5 h-5" />
               </Link>
               <Link
                 to="/works"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full border-2 border-primary text-primary font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full border-2 font-medium transition-all hover:scale-105"
+                style={{
+                  borderColor: "hsl(var(--accent-4))",
+                  color: "hsl(var(--accent-4))",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "hsl(var(--accent-4))";
+                  e.currentTarget.style.color = "white";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "transparent";
+                  e.currentTarget.style.color = "hsl(var(--accent-4))";
+                }}
               >
                 施工実績を見る
               </Link>
@@ -57,7 +70,12 @@ export const HeroSection = () => {
             className="order-1 lg:order-2"
           >
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-pink/20 to-accent/20 rounded-3xl transform rotate-3" />
+              <div 
+                className="absolute inset-0 rounded-3xl transform rotate-3 opacity-30"
+                style={{
+                  background: "linear-gradient(135deg, hsl(var(--accent-1) / 0.2), hsl(var(--accent-3) / 0.2), hsl(var(--accent-5) / 0.2))",
+                }}
+              />
               <img
                 src={heroPainting}
                 alt="COLORS 塗装作業風景"

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { GradientDivider } from "@/components/ui/gradient-divider";
 
 const navItems = [
   { label: "HOME", path: "/" },
@@ -18,17 +19,12 @@ export const Header = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-md shadow-sm">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-20">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <img
-              src="/rogo.png"
-              alt="COLORS ロゴ"
-              className="h-12 w-auto object-contain"
-            />
-          </Link>
-
+      {/* 多色グラデライン（上品に） */}
+      <div className="absolute top-0 left-0 right-0">
+        <GradientDivider thickness="thin" />
+      </div>
+      <div className="container mx-auto px-4 header-inner">
+        <div className="flex items-center justify-center h-20">
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-8">
             {navItems.map((item) => (
@@ -45,7 +41,10 @@ export const Header = () => {
                 {location.pathname === item.path && (
                   <motion.div
                     layoutId="underline"
-                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-pink to-accent"
+                    className="absolute -bottom-1 left-0 right-0 h-0.5"
+                    style={{
+                      background: "linear-gradient(to right, hsl(var(--accent-1)), hsl(var(--accent-2)), hsl(var(--accent-3)), hsl(var(--accent-4)), hsl(var(--accent-5)), hsl(var(--accent-6)))",
+                    }}
                   />
                 )}
               </Link>
@@ -55,7 +54,7 @@ export const Header = () => {
           {/* CTA Button */}
           <Link
             to="/contact"
-            className="hidden lg:flex items-center gap-2 btn-gradient text-sm"
+            className="hidden lg:flex items-center gap-2 btn-gradient text-sm hover:scale-105 transition-transform ml-8"
           >
             お問い合わせ
             <ChevronRight className="w-4 h-4" />
@@ -64,7 +63,7 @@ export const Header = () => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="lg:hidden p-2 text-foreground"
+            className="lg:hidden absolute right-4 p-2 text-foreground"
             aria-label="メニューを開く"
           >
             {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
