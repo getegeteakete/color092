@@ -12,12 +12,13 @@ export const HeroSection = () => {
         <ColorGlow intensity="light" size="lg" className="bottom-0 right-0" />
       </div>
 
-      <div className="container mx-auto px-4 pt-24 pb-12">
+      <div className="container mx-auto px-4 pt-0 pb-12">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Text Content */}
-          <div className="order-2 lg:order-1">
+          <div className="order-2 lg:order-1 lg:pt-24">
             <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight mb-6">
-              塗り広げるのは <span className="text-gradient">お客様の笑える未来です。</span>
+              塗り広げるのは<br />
+              <span className="text-gradient">お客様の笑える未来です。</span>
             </h1>
             
             <p className="text-lg text-muted-foreground mb-4">
@@ -58,7 +59,7 @@ export const HeroSection = () => {
           </div>
 
           {/* Hero Image */}
-          <div className="order-1 lg:order-2 hero-image">
+          <div className="order-1 lg:order-2 hero-image mt-20 lg:mt-0">
             <div className="relative">
               <div 
                 className="absolute inset-0 rounded-3xl transform rotate-3 opacity-30"

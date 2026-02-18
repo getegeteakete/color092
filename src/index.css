@@ -396,7 +396,7 @@
 
     .hero-section {
       min-height: auto;
-      padding-top: 80px;
+      padding-top: 0;
       padding-bottom: 40px;
     }
 
