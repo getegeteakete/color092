@@ -70,10 +70,6 @@ export const HeroSection = () => {
                 src={heroPainting}
                 alt="COLORS 塗装作業風景"
                 className="relative rounded-3xl shadow-2xl w-full h-auto object-cover"
-                style={{
-                  transform: "scale(0.75)",
-                  opacity: 0.6,
-                }}
               />
             </div>
           </div>

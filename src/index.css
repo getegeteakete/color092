@@ -400,9 +400,14 @@
       padding-bottom: 40px;
     }
 
-    /* Hero右側画像を非表示 */
+    /* Hero右側画像を通常サイズで表示 */
     .hero-image {
-      display: none;
+      display: block;
+    }
+
+    .hero-image img {
+      transform: none !important;
+      opacity: 1 !important;
     }
   }
 
