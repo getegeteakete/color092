@@ -25,6 +25,15 @@ export const Header = () => {
       </div>
       <div className="container mx-auto px-4 header-inner">
         <div className="flex items-center justify-center h-20">
+          {/* Mobile Logo */}
+          <Link to="/" className="lg:hidden absolute left-4 flex items-center">
+            <img
+              src="/rogo.png"
+              alt="COLORS ロゴ"
+              className="h-10 w-auto object-contain"
+            />
+          </Link>
+          
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-8">
             {navItems.map((item) => (
