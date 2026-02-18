@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import { 
   Zap, 
   Camera, 
@@ -66,15 +65,10 @@ const steps = [
 
 export const AiEstimateSection = () => {
   return (
-    <section id="ai-estimate-area" className="py-24 bg-card">
+    <section id="ai-estimate-area" className="bg-card">
       <div className="container mx-auto px-4">
         {/* セクションタイトル */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
+        <div className="text-center mb-16">
           <span className="section-label">AI Estimate</span>
           <h2 className="section-title mb-4">
             <span className="text-gradient">AI仮見積もり</span>・現地調査予約システム
@@ -83,7 +77,7 @@ export const AiEstimateSection = () => {
             お問い合わせ前に、まずはAIで概算を。<br />
             来店や訪問の手間を減らし、スムーズなご相談を実現します。
           </p>
-        </motion.div>
+        </div>
 
         {/* 機能紹介カード */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
@@ -91,14 +85,8 @@ export const AiEstimateSection = () => {
             const accentIndex = index % 6;
             const accentNum = accentIndex + 1;
             return (
-              <motion.div
-                key={card.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <RainbowRingCard className="p-6 shadow-lg">
+              <div key={card.title}>
+                <RainbowRingCard className="card-padding shadow-lg">
                   <div 
                     className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4"
                     style={{
@@ -122,29 +110,18 @@ export const AiEstimateSection = () => {
                     </span>
                   )}
                 </RainbowRingCard>
-              </motion.div>
+              </div>
             );
           })}
         </div>
 
         {/* 利用の流れ（STEP UI） */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-20"
-        >
+        <div className="mb-20">
           <h3 className="text-2xl font-bold text-center mb-12">利用の流れ</h3>
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-2">
             {steps.map((step, index) => (
               <div key={step.number} className="contents">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className="w-full md:w-auto"
-                >
+                <div className="w-full md:w-auto">
                   <div className="bg-card rounded-2xl p-6 shadow-md border border-border text-center h-full">
                     <div 
                       className="inline-flex items-center justify-center w-12 h-12 rounded-full text-lg font-bold text-white mb-4 mx-auto"
@@ -157,7 +134,7 @@ export const AiEstimateSection = () => {
                     <h4 className="text-base font-bold mb-2">{step.title}</h4>
                     <p className="text-xs text-muted-foreground">{step.description}</p>
                   </div>
-                </motion.div>
+                </div>
                 {/* 矢印（最後以外、PC表示のみ） */}
                 {index < steps.length - 1 && (
                   <ArrowRight 
@@ -170,15 +147,10 @@ export const AiEstimateSection = () => {
               </div>
             ))}
           </div>
-        </motion.div>
+        </div>
 
         {/* CTAエリア */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
-        >
+        <div className="text-center mb-12">
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link
               to="/estimate"
@@ -204,15 +176,10 @@ export const AiEstimateSection = () => {
               <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
-        </motion.div>
+        </div>
 
         {/* 注意文 */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="text-center"
-        >
+        <div className="text-center">
           <div className="inline-flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <CheckCircle2 
@@ -236,7 +203,7 @@ export const AiEstimateSection = () => {
               <span>仮見積は目安です</span>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

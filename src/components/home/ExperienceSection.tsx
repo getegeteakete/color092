@@ -1,15 +1,8 @@
-import { motion } from "framer-motion";
-
 export const ExperienceSection = () => {
   return (
-    <section className="py-16 bg-card border-t border-border">
+    <section className="bg-card border-t border-border">
       <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="flex justify-center"
-        >
+        <div className="flex justify-center">
           <div className="bg-card rounded-2xl shadow-xl p-6 border border-border">
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 rounded-full bg-gradient-to-br from-pink to-accent flex items-center justify-center flex-shrink-0">
@@ -21,7 +14,7 @@ export const ExperienceSection = () => {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

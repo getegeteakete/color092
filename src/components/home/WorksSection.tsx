@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import beforeAfter from "@/assets/before-after.jpg";
 import paintingWork from "@/assets/painting-work.jpg";
@@ -38,14 +37,9 @@ const works = [
 
 export const WorksSection = () => {
   return (
-    <section className="py-24 bg-card">
+    <section className="bg-card">
       <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12"
-        >
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
             <span className="section-label">Works</span>
             <h2 className="section-title">施工実績</h2>
@@ -60,17 +54,11 @@ export const WorksSection = () => {
             一覧を見る
             <ChevronRight className="w-5 h-5" />
           </Link>
-        </motion.div>
+        </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {works.map((work, index) => (
-            <motion.div
-              key={work.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-            >
+            <div key={work.id}>
               <Link to={`/works/${work.id}`} className="group block">
                 <div className="relative overflow-hidden rounded-2xl mb-4">
                   <img
@@ -90,7 +78,7 @@ export const WorksSection = () => {
                   </h3>
                 </div>
               </Link>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

@@ -32,10 +32,10 @@ const Insurance = () => {
                 Insurance
               </span>
               <h1 className="text-4xl md:text-5xl font-bold mt-2 mb-6">
-                その工事、災害保険を<br />使えるかも！
+                災害による被害、<br />火災保険で修繕できる可能性があります
               </h1>
               <p className="text-white/90 text-lg">
-                火災保険を活用して、修繕費用を抑えることができるかもしれません。
+                火災保険を活用して、修繕費用を抑えることができる可能性があります。
               </p>
             </motion.div>
           </div>

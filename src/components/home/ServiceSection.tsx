@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import { ChevronRight, Paintbrush, Hammer } from "lucide-react";
 import paintingWork from "@/assets/painting-work.jpg";
 import reformInterior from "@/assets/reform-interior.jpg";
@@ -29,26 +28,17 @@ const services = [
 
 export const ServiceSection = () => {
   return (
-    <section className="py-24 bg-card">
+    <section className="bg-card">
       <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
+        <div className="text-center mb-16">
           <span className="section-label">Service</span>
           <h2 className="section-title">事業内容</h2>
-        </motion.div>
+        </div>
 
         <div className="space-y-24">
           {services.map((service, index) => (
-            <motion.div
+            <div
               key={service.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.2 }}
               className={`grid lg:grid-cols-2 gap-12 items-center ${
                 index % 2 === 1 ? "lg:flex-row-reverse" : ""
               }`}
@@ -101,7 +91,7 @@ export const ServiceSection = () => {
                   </Link>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

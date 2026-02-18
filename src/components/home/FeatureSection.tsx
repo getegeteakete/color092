@@ -1,6 +1,4 @@
-import { motion } from "framer-motion";
 import { RainbowRingCard } from "@/components/ui/rainbow-ring-card";
-import { getAccentColorClass } from "@/lib/color-utils";
 
 const features = [
   {
@@ -25,55 +23,47 @@ const features = [
 
 export const FeatureSection = () => {
   return (
-    <section className="pt-8 md:pt-24 pb-12 md:pb-24 bg-hero-gradient">
+    <section className="bg-hero-gradient">
       <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-8 md:mb-16"
-        >
+        <div className="text-center mb-8 md:mb-16">
           <span className="section-label">Feature</span>
           <h2 className="section-title">
             <span className="text-gradient">COLORS</span>の特徴
           </h2>
-        </motion.div>
+        </div>
 
         <div className="grid md:grid-cols-3 gap-4 md:gap-8">
           {features.map((feature, index) => (
-            <motion.div
-              key={feature.number}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <RainbowRingCard className="p-6 md:p-8 shadow-lg">
-                {/* Number Badge - 色分け */}
-                <div 
-                  className="inline-flex items-center justify-center w-12 h-12 rounded-full text-lg font-bold text-white mb-6"
-                  style={{
-                    background: `linear-gradient(135deg, hsl(var(--accent-${index + 1})), hsl(var(--accent-${index + 1}-gradient)))`,
-                  }}
-                >
-                  {feature.number}
+            <div key={feature.number}>
+              <RainbowRingCard className="card-padding shadow-lg">
+                {/* コンテンツラッパー - z-indexで前面に */}
+                <div className="relative z-10">
+                  {/* Number Badge - 色分け */}
+                  <div 
+                    className="inline-flex items-center justify-center w-12 h-12 rounded-full text-lg font-bold text-white mb-6"
+                    style={{
+                      background: `linear-gradient(135deg, hsl(var(--accent-${index + 1})), hsl(var(--accent-${index + 1}-gradient)))`,
+                    }}
+                  >
+                    {feature.number}
+                  </div>
+
+                  {/* Content */}
+                  <h3 className="text-xl font-bold mb-4">{feature.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed text-sm">
+                    {feature.description}
+                  </p>
                 </div>
 
-                {/* Content */}
-                <h3 className="text-xl font-bold mb-4">{feature.title}</h3>
-                <p className="text-muted-foreground leading-relaxed text-sm">
-                  {feature.description}
-                </p>
-
-                {/* Hover Effect - 多色グロウ */}
+                {/* Hover Effect - 多色グロウ（背景レイヤー） */}
                 <div 
-                  className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+                  className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-0"
                   style={{
                     background: `linear-gradient(135deg, hsl(var(--accent-${index + 1}-soft)), hsl(var(--accent-${(index + 1) % 6 + 1}-soft)))`,
                   }}
                 />
               </RainbowRingCard>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

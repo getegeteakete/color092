@@ -24,7 +24,7 @@ import AdminList from "./pages/admin/AdminList";
 import AdminDetail from "./pages/admin/AdminDetail";
 import ProtectedRoute from "./components/admin/ProtectedRoute";
 import ErrorBoundary from "./components/ErrorBoundary";
-import { PaintDecoration } from "@/components/ui/PaintDecoration";
+import { PaintSystem } from "@/components/ui/PaintSystem";
 import { BrandSide } from "@/components/layout/BrandSide";
 
 const queryClient = new QueryClient();
@@ -96,8 +96,8 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          {/* ペンキスプラッシュ装飾（全ページ共通） */}
-          <PaintDecoration />
+          {/* スクロール連動ペンキスプラッシュ装飾システム（全ページ共通） */}
+          <PaintSystem />
           {/* ブランドロゴサイドバー（全ページ共通） */}
           <BrandSide />
           <AppRoutes />

@@ -1,21 +1,14 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import paintingWork from "@/assets/painting-work.jpg";
 
 export const AboutSection = () => {
   return (
-    <section className="py-24 bg-section-gradient overflow-hidden">
+    <section className="bg-section-gradient overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Image */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="relative"
-          >
+          <div className="relative">
             <div className="absolute -top-8 -left-8 w-full h-full bg-gradient-to-br from-pink/30 to-accent/30 rounded-3xl" />
             <img
               src={paintingWork}
@@ -24,15 +17,10 @@ export const AboutSection = () => {
             />
             {/* Decorative Elements */}
             <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-gradient-to-br from-pink to-accent opacity-50" />
-          </motion.div>
+          </div>
 
           {/* Content */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
+          <div>
             <span className="section-label">About us</span>
             <h2 className="section-title mb-6">COLORSについて</h2>
             
@@ -53,7 +41,7 @@ export const AboutSection = () => {
               詳しくみる
               <ChevronRight className="w-5 h-5" />
             </Link>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

@@ -11,6 +11,12 @@
 
 @layer base {
   :root {
+    /* タイポグラフィ - iPhone最適化 */
+    --fs-hero: clamp(22px, 5vw, 34px);
+    --fs-h2: clamp(18px, 4.5vw, 26px);
+    --fs-h3: clamp(16px, 4vw, 20px);
+    --fs-body: clamp(14px, 3.8vw, 16px);
+
     /* 基本色 - 柔らかいクリーム/ピンク系背景（維持） */
     --background: 20 60% 98%;
     --foreground: 240 20% 20%;
@@ -144,8 +150,24 @@
     z-index: 1;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1 {
+    font-size: var(--fs-hero);
     @apply font-bold tracking-tight;
+  }
+
+  h2 {
+    font-size: var(--fs-h2);
+    @apply font-bold tracking-tight;
+  }
+
+  h3 {
+    font-size: var(--fs-h3);
+    @apply font-bold tracking-tight;
+  }
+
+  p {
+    font-size: var(--fs-body);
+    line-height: 1.6;
   }
 }
 
@@ -322,18 +344,6 @@
     }
   }
 
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
-  }
-
-  .animate-float {
-    animation: float 3s ease-in-out infinite;
-  }
 
   /* スクロールスナップ */
   .snap-section {
@@ -341,103 +351,124 @@
   }
 
   /* ============================================
-     ペンキスプラッシュ装飾レイヤー
+     iPhone閲覧最適化
      ============================================ */
-  .paint-layer {
+  
+  /* セクション共通余白 */
+  section {
+    padding: 48px 0;
+  }
+
+  /* コンテナ最大幅制御 */
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding-inline: 16px;
+  }
+
+  /* Heroセクション高さ調整 */
+  .hero-section {
+    min-height: 70vh;
+  }
+
+  /* カードパディング圧縮 */
+  .card-padding {
+    padding: 16px;
+  }
+
+  /* CTAボタン調整 */
+  .cta-button {
+    margin-top: 24px;
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+
+  /* スマホ最適化 */
+  @media (max-width: 768px) {
+    section {
+      padding: 28px 0;
+    }
+
+    .container {
+      max-width: 640px;
+      padding-inline: 16px;
+    }
+
+    .hero-section {
+      min-height: auto;
+      padding-top: 80px;
+      padding-bottom: 40px;
+    }
+
+    /* Hero右側画像を非表示 */
+    .hero-image {
+      display: none;
+    }
+  }
+
+  /* ============================================
+     スクロール連動ペンキスプラッシュ装飾システム
+     ============================================ */
+  .paint-system {
     position: fixed;
     inset: 0;
     pointer-events: none;
-    z-index: 0;
+    z-index: -1;
     overflow: hidden;
   }
 
   .paint {
     position: absolute;
-    opacity: 0.25;
-    filter: blur(2px);
+    width: 220px;
+    height: 220px;
+    transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity: 0;
+    transform: translateY(60px) scale(0.9);
+    filter: blur(0.5px);
   }
 
-  .paint.top-left {
-    top: -80px;
-    left: -60px;
-    transform: rotate(-15deg);
+  .paint.show {
+    opacity: 0.55;
+    transform: translateY(0) scale(1);
+    animation: floatPaint 6s ease-in-out infinite;
   }
 
-  .paint.bottom-right {
-    bottom: -100px;
-    right: -70px;
-    transform: rotate(20deg);
-  }
-
-  .paint.bottom-left {
-    bottom: -50px;
-    left: -40px;
-    transform: rotate(10deg);
-  }
-
-  .paint.top-right {
+  .paint-top-left {
     top: -60px;
-    right: -50px;
-    transform: rotate(-10deg);
+    left: -60px;
   }
 
-  .paint.center-bottom {
-    bottom: -60px;
-    left: 50%;
-    transform: translateX(-50%) rotate(5deg);
+  .paint-bottom-right {
+    bottom: -80px;
+    right: -60px;
   }
 
-  .paint.small {
-    opacity: 0.15;
-    transform: scale(0.6);
+  .paint-bottom-left {
+    bottom: -40px;
+    left: -40px;
   }
 
-  .paint.small.bottom-left {
-    transform: scale(0.6) rotate(10deg);
-  }
-
-  .paint.small.center-bottom {
-    transform: translateX(-50%) scale(0.6) rotate(5deg);
+  @keyframes floatPaint {
+    0% {
+      transform: translateY(0) scale(1);
+    }
+    50% {
+      transform: translateY(-8px) scale(1);
+    }
+    100% {
+      transform: translateY(0) scale(1);
+    }
   }
 
   /* スマホ最適化 */
   @media (max-width: 768px) {
     .paint {
-      transform: scale(0.7);
-      opacity: 0.18;
+      width: 140px;
+      height: 140px;
     }
 
-    .paint.top-left {
-      transform: scale(0.7) rotate(-15deg);
-    }
-
-    .paint.bottom-right {
-      transform: scale(0.7) rotate(20deg);
-    }
-
-    .paint.bottom-left {
-      transform: scale(0.7) rotate(10deg);
-    }
-
-    .paint.top-right {
-      transform: scale(0.7) rotate(-10deg);
-    }
-
-    .paint.center-bottom {
-      transform: translateX(-50%) scale(0.7) rotate(5deg);
-    }
-
-    .paint.small {
-      transform: scale(0.42);
-      opacity: 0.12;
-    }
-
-    .paint.small.bottom-left {
-      transform: scale(0.42) rotate(10deg);
-    }
-
-    .paint.small.center-bottom {
-      transform: translateX(-50%) scale(0.42) rotate(5deg);
+    .paint.show {
+      opacity: 0.55;
     }
   }
 
