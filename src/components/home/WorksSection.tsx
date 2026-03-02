@@ -1,39 +1,5 @@
 import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
-import beforeAfter from "@/assets/before-after.jpg";
-import paintingWork from "@/assets/painting-work.jpg";
-import reformInterior from "@/assets/reform-interior.jpg";
-
-const works = [
-  {
-    id: 1,
-    title: "屋上の防水工事をご依頼いただきました。",
-    date: "2024.11.01",
-    category: "施工実績",
-    image: beforeAfter,
-  },
-  {
-    id: 2,
-    title: "倉庫内不用品処分、リフォームをご依頼頂きました",
-    date: "2024.10.08",
-    category: "施工実績",
-    image: reformInterior,
-  },
-  {
-    id: 3,
-    title: "座敷スペースをテーブル席に変更するリフォームのご依頼をいただきました。",
-    date: "2024.10.08",
-    category: "施工実績",
-    image: paintingWork,
-  },
-  {
-    id: 4,
-    title: "一般住宅のトイレのリフォームをご依頼いただきました",
-    date: "2024.10.08",
-    category: "施工実績",
-    image: beforeAfter,
-  },
-];
 
 export const WorksSection = () => {
   return (
@@ -56,30 +22,11 @@ export const WorksSection = () => {
           </Link>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {works.map((work, index) => (
-            <div key={work.id}>
-              <Link to={`/works/${work.id}`} className="group block">
-                <div className="relative overflow-hidden rounded-2xl mb-4">
-                  <img
-                    src={work.image}
-                    alt={work.title}
-                    className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-xs">
-                    <span className="text-primary font-medium">{work.category}</span>
-                    <span className="text-muted-foreground">{work.date}</span>
-                  </div>
-                  <h3 className="font-medium text-sm line-clamp-2 group-hover:text-primary transition-colors">
-                    {work.title}
-                  </h3>
-                </div>
-              </Link>
-            </div>
-          ))}
+        <div className="rounded-2xl bg-muted/50 border border-border py-16 px-6 text-center">
+          <p className="text-muted-foreground text-lg">現在準備中</p>
+          <p className="text-muted-foreground/80 text-sm mt-2">
+            施工実績がそろい次第、掲載してまいります。
+          </p>
         </div>
       </div>
     </section>

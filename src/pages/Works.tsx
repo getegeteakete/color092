@@ -2,11 +2,16 @@ import { useState } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import beforeAfter from "@/assets/before-after.jpg";
-import paintingWork from "@/assets/painting-work.jpg";
-import reformInterior from "@/assets/reform-interior.jpg";
-import heroPainting from "@/assets/hero-painting.jpg";
+
+// 施工実績がそろったらここにデータを追加すると一覧表示に切り替わります
+// 形式: { id: number; title: string; date: string; category: "1"|"2"; categoryLabel: string }
+const worksData: Array<{
+  id: number;
+  title: string;
+  date: string;
+  category: string;
+  categoryLabel: string;
+}> = [];
 
 const categories = [
   { id: "all", label: "すべて" },
@@ -14,78 +19,11 @@ const categories = [
   { id: "2", label: "リフォーム" },
 ];
 
-const worksData = [
-  {
-    id: 37,
-    title: "屋上の防水工事をご依頼いただきました。",
-    date: "2024.11.01",
-    category: "2",
-    categoryLabel: "リフォーム",
-    image: beforeAfter,
-  },
-  {
-    id: 30,
-    title: "倉庫内不用品処分、リフォームをご依頼頂きました",
-    date: "2024.10.08",
-    category: "2",
-    categoryLabel: "リフォーム",
-    image: reformInterior,
-  },
-  {
-    id: 29,
-    title: "座敷スペースをテーブル席に変更するリフォームのご依頼をいただきました。",
-    date: "2024.10.08",
-    category: "2",
-    categoryLabel: "リフォーム",
-    image: paintingWork,
-  },
-  {
-    id: 28,
-    title: "一般住宅のトイレのリフォームをご依頼いただきました",
-    date: "2024.10.08",
-    category: "2",
-    categoryLabel: "リフォーム",
-    image: beforeAfter,
-  },
-  {
-    id: 26,
-    title: "倉庫全体の塗装をご依頼頂きました",
-    date: "2024.10.08",
-    category: "1",
-    categoryLabel: "塗装",
-    image: heroPainting,
-  },
-  {
-    id: 25,
-    title: "車体塗装をご依頼いただきました",
-    date: "2024.10.08",
-    category: "1",
-    categoryLabel: "塗装",
-    image: paintingWork,
-  },
-  {
-    id: 23,
-    title: "倉庫内の空きスペースに、食品加工所を造作させていただきました",
-    date: "2024.10.08",
-    category: "2",
-    categoryLabel: "リフォーム",
-    image: reformInterior,
-  },
-  {
-    id: 22,
-    title: "キッチンカー外装依頼を頂きました。内部の衛生面にもこだわり空気触媒を施工しています",
-    date: "2024.10.08",
-    category: "1",
-    categoryLabel: "塗装",
-    image: heroPainting,
-  },
-];
-
 const Works = () => {
   const [activeCategory, setActiveCategory] = useState("all");
-
+  const isPreparing = worksData.length === 0;
   const filteredWorks =
-    activeCategory === "all"
+    !isPreparing && activeCategory === "all"
       ? worksData
       : worksData.filter((work) => work.category === activeCategory);
 
@@ -114,64 +52,75 @@ const Works = () => {
           </div>
         </section>
 
-        {/* Filter */}
-        <section className="py-8 bg-card border-b border-border">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-wrap gap-3">
-              {categories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => setActiveCategory(category.id)}
-                  className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
-                    activeCategory === category.id
-                      ? "btn-gradient"
-                      : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                  }`}
-                >
-                  {category.label}
-                </button>
-              ))}
+        {isPreparing ? (
+          <section className="py-16 bg-card">
+            <div className="container mx-auto px-4">
+              <div className="rounded-2xl bg-muted/50 border border-border py-20 px-6 text-center max-w-2xl mx-auto">
+                <p className="text-muted-foreground text-xl">現在準備中</p>
+                <p className="text-muted-foreground/80 text-sm mt-3">
+                  施工実績がそろい次第、掲載してまいります。
+                </p>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        ) : (
+          <>
+            {/* Filter - データ追加時に表示 */}
+            <section className="py-8 bg-card border-b border-border">
+              <div className="container mx-auto px-4">
+                <div className="flex flex-wrap gap-3">
+                  {categories.map((category) => (
+                    <button
+                      key={category.id}
+                      onClick={() => setActiveCategory(category.id)}
+                      className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+                        activeCategory === category.id
+                          ? "btn-gradient"
+                          : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                      }`}
+                    >
+                      {category.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </section>
 
-        {/* Works Grid */}
-        <section className="py-16 bg-card">
-          <div className="container mx-auto px-4">
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredWorks.map((work, index) => (
-                <motion.div
-                  key={work.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.05 }}
-                >
-                  <Link to={`/works/${work.id}`} className="group block">
-                    <div className="relative overflow-hidden rounded-2xl mb-4">
-                      <img
-                        src={work.image}
-                        alt={work.title}
-                        className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-110"
-                      />
-                      <div className="absolute top-4 left-4">
-                        <span className="px-3 py-1 bg-card/90 backdrop-blur-sm rounded-full text-xs font-medium">
-                          {work.categoryLabel}
-                        </span>
+            {/* Works Grid - データ追加時に表示 */}
+            <section className="py-16 bg-card">
+              <div className="container mx-auto px-4">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {filteredWorks.map((work, index) => (
+                    <motion.div
+                      key={work.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.05 }}
+                    >
+                      <div className="group block">
+                        <div className="relative overflow-hidden rounded-2xl mb-4 h-56 bg-muted flex items-center justify-center">
+                          <span className="text-muted-foreground text-sm">施工実績</span>
+                          <div className="absolute top-4 left-4">
+                            <span className="px-3 py-1 bg-card/90 backdrop-blur-sm rounded-full text-xs font-medium">
+                              {work.categoryLabel}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <time className="text-sm text-muted-foreground">{work.date}</time>
+                          <h3 className="font-medium line-clamp-2 group-hover:text-primary transition-colors">
+                            {work.title}
+                          </h3>
+                        </div>
                       </div>
-                    </div>
-                    <div className="space-y-2">
-                      <time className="text-sm text-muted-foreground">{work.date}</time>
-                      <h3 className="font-medium line-clamp-2 group-hover:text-primary transition-colors">
-                        {work.title}
-                      </h3>
-                    </div>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          </>
+        )}
       </main>
       <Footer />
     </div>

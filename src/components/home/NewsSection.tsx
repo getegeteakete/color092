@@ -3,22 +3,10 @@ import { ChevronRight } from "lucide-react";
 
 const newsItems = [
   {
-    id: 13,
-    date: "2024.10.08",
+    id: 1,
+    date: "2026.01.27",
     category: "お知らせ",
-    title: "ホームページをリニューアルしました",
-  },
-  {
-    id: 12,
-    date: "2024.10.08",
-    category: "お知らせ",
-    title: "スマートフォンから閲覧可能になりました",
-  },
-  {
-    id: 11,
-    date: "2024.10.08",
-    category: "お知らせ",
-    title: "施工事例ページを更新しました",
+    title: "HPリニューアル",
   },
 ];
 
