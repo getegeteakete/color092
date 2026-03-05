@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { motion } from "framer-motion";
@@ -8,24 +8,85 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 
+const CONTACT_FORM_URL =
+  import.meta.env.VITE_CONTACT_FORM_URL || `${window.location.origin}/contact.php`;
+
 const Contact = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    e.stopPropagation();
+    if (!formRef.current) return;
+    submitForm(formRef.current);
+  };
+
+  const submitForm = async (form: HTMLFormElement) => {
+    if (isSubmitting) return;
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const fd = new FormData(form);
+    const payload = {
+      name: (fd.get("name") as string) ?? "",
+      phone: (fd.get("phone") as string) ?? "",
+      email: (fd.get("email") as string) ?? "",
+      subject: (fd.get("subject") as string) ?? "",
+      message: (fd.get("message") as string) ?? "",
+    };
 
-    toast({
-      title: "お問い合わせを受け付けました",
-      description: "担当者より折り返しご連絡いたします。",
-    });
+    try {
+      const res = await fetch(CONTACT_FORM_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = (await res.json().catch(() => ({}))) as {
+        ok?: boolean;
+        error?: string;
+        message?: string;
+        autoReplySent?: boolean;
+      };
 
-    setIsSubmitting(false);
-    (e.target as HTMLFormElement).reset();
+      if (!res.ok) {
+        toast({
+          variant: "destructive",
+          title: "送信できませんでした",
+          description: data.error || "しばらく経ってから再度お試しください。",
+        });
+        return;
+      }
+
+      if (data.ok) {
+        toast({
+          title: "お問い合わせを受け付けました",
+          description:
+            data.autoReplySent === false
+              ? "担当者よりご連絡いたします。※自動返信メールの送信に失敗しました。"
+              : "担当者より折り返しご連絡いたします。自動返信メールをお送りしました。届かない場合は迷惑メールフォルダをご確認ください。",
+        });
+        form.reset();
+      } else {
+        toast({
+          variant: "destructive",
+          title: "送信できませんでした",
+          description: data.error || "しばらく経ってから再度お試しください。",
+        });
+      }
+    } catch {
+      toast({
+        variant: "destructive",
+        title: "送信できませんでした",
+        description: "通信エラーです。接続を確認して再度お試しください。",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -132,7 +193,14 @@ const Contact = () => {
               >
                 <div className="bg-secondary/50 rounded-3xl p-8">
                   <h2 className="text-2xl font-bold mb-6">お問い合わせフォーム</h2>
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  <form
+                    ref={formRef}
+                    onSubmit={handleSubmit}
+                    method="post"
+                    action="#"
+                    className="space-y-6"
+                    noValidate
+                  >
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
                         <label htmlFor="name" className="block text-sm font-medium mb-2">
@@ -214,9 +282,10 @@ const Contact = () => {
                     </p>
 
                     <Button
-                      type="submit"
+                      type="button"
                       disabled={isSubmitting}
                       className="w-full btn-gradient"
+                      onClick={() => formRef.current && submitForm(formRef.current)}
                     >
                       {isSubmitting ? (
                         "送信中..."

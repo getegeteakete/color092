@@ -44,10 +44,11 @@ export const analyzePhotoDeterioration = async (
     const imageContents = await Promise.all(
       photosToAnalyze.map(async (photo) => {
         const base64 = await fileToBase64(photo);
+        const mimeType = photo.type && photo.type.startsWith('image/') ? photo.type : 'image/jpeg';
         return {
           type: 'image_url',
           image_url: {
-            url: `data:image/jpeg;base64,${base64}`,
+            url: `data:${mimeType};base64,${base64}`,
           },
         };
       })

@@ -71,3 +71,18 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+
+## お問い合わせフォーム（Xserverメール）
+
+フォーム送信をXserverのメールで受信する場合:
+
+1. **contact.php をXserverに設置**  
+   `public/contact.php` を、ドメインの**ドキュメントルート**（例: `public_html`）にアップロードし、  
+   `https://あなたのドメイン/contact.php` でアクセスできるようにしてください。
+
+2. **送信先の変更**  
+   `contact.php` の先頭付近の `TO_EMAIL` と `FROM_EMAIL` を、Xserverで設定したメールアドレス（例: `info@colors-official.com`）に合わせて編集してください。
+
+3. **サイトがVercelなど別ホストの場合**  
+   フォームは同じドメインの `/contact.php` に送信します。サイトがVercelで、PHPをXserverで動かす場合は、環境変数で送信先を指定してください。  
+   例: `VITE_CONTACT_FORM_URL=https://colors-official.com/contact.php`

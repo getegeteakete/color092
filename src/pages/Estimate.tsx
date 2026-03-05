@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -88,6 +88,20 @@ const Estimate = () => {
   const updateFormData = (field: keyof FormData, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
+
+  // 写真プレビュー用URLを管理（createObjectURLのメモリ解放で表示エラー防止）
+  const [photoPreviewUrls, setPhotoPreviewUrls] = useState<string[]>([]);
+  const photoUrlsRef = useRef<string[]>([]);
+  useEffect(() => {
+    const urls = formData.photos.map((f) => URL.createObjectURL(f));
+    photoUrlsRef.current.forEach((u) => URL.revokeObjectURL(u));
+    photoUrlsRef.current = urls;
+    setPhotoPreviewUrls(urls);
+    return () => {
+      photoUrlsRef.current.forEach((u) => URL.revokeObjectURL(u));
+      photoUrlsRef.current = [];
+    };
+  }, [formData.photos]);
 
   const handleNext = async () => {
     if (validateStep(currentStep)) {
@@ -242,9 +256,8 @@ const Estimate = () => {
       } catch (error: any) {
         console.error('Photo analysis error:', error);
         toast({
-          title: "写真分析エラー",
-          description: error.message || "写真の分析に失敗しました。手動で劣化状況を選択してください。",
-          variant: "destructive",
+          title: "写真は追加されました",
+          description: "AI分析はスキップしました。劣化状況を手動で選択してください。",
         });
       } finally {
         setIsAnalyzingPhotos(false);
@@ -623,7 +636,7 @@ const Estimate = () => {
                             {formData.photos.map((photo, index) => (
                               <div key={index} className="relative group">
                                 <img
-                                  src={URL.createObjectURL(photo)}
+                                  src={photoPreviewUrls[index] ?? ""}
                                   alt={`写真 ${index + 1}`}
                                   className="w-full h-32 object-cover rounded-lg"
                                 />

@@ -23,13 +23,13 @@ export const Footer = () => {
         <div className="absolute inset-0">
           <ColorGlow intensity="medium" size="xl" className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
         </div>
-        <div 
-          className="absolute inset-0 opacity-80"
+        <div
+          className="absolute inset-0 opacity-80 pointer-events-none"
           style={{
             background: "linear-gradient(135deg, hsl(var(--accent-1) / 0.3), hsl(var(--accent-2) / 0.3), hsl(var(--accent-3) / 0.3), hsl(var(--accent-4) / 0.3), hsl(var(--accent-5) / 0.3), hsl(var(--accent-6) / 0.3))",
           }}
         />
-        <div className="container mx-auto px-4 text-center relative z-10">
+        <div className="container mx-auto px-4 text-center relative z-10 pointer-events-auto">
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
             まずはお気軽にご相談ください
           </h2>
@@ -38,7 +38,7 @@ export const Footer = () => {
           </p>
           <Link
             to="/contact"
-            className="inline-flex items-center gap-2 bg-white px-8 py-4 rounded-full font-medium hover:bg-white/90 transition-all hover:scale-105"
+            className="inline-flex items-center gap-2 bg-white px-8 py-4 rounded-full font-medium hover:bg-white/90 transition-all hover:scale-105 relative z-10"
             style={{
               color: "hsl(var(--accent-4))",
             }}
