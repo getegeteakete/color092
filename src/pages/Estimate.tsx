@@ -85,7 +85,7 @@ const Estimate = () => {
     photos: [],
   });
 
-  const updateFormData = (field: keyof FormData, value: any) => {
+  const updateFormData = <K extends keyof FormData>(field: K, value: FormData[K]) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -209,11 +209,11 @@ const Estimate = () => {
       );
       setAiEstimate(result);
       return result;
-    } catch (error: any) {
-      console.error('AI estimate error:', error);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "AI見積もりの計算に失敗しました。従来の計算方法を使用します。";
       toast({
         title: "AI見積もりエラー",
-        description: error.message || "AI見積もりの計算に失敗しました。従来の計算方法を使用します。",
+        description: message,
         variant: "destructive",
       });
       return null;
@@ -253,8 +253,7 @@ const Estimate = () => {
           title: "写真分析完了",
           description: `AI分析結果: ${analysis.deteriorationLevel} (信頼度: ${(analysis.confidence * 100).toFixed(0)}%)`,
         });
-      } catch (error: any) {
-        console.error('Photo analysis error:', error);
+      } catch {
         toast({
           title: "写真は追加されました",
           description: "AI分析はスキップしました。劣化状況を手動で選択してください。",
@@ -293,7 +292,6 @@ const Estimate = () => {
               .upload(filePath, photo);
             
             if (uploadError) {
-              console.error('Upload error:', uploadError);
               // 写真のアップロードに失敗しても続行
               continue;
             }
@@ -306,8 +304,7 @@ const Estimate = () => {
               photoUrls.push(data.publicUrl);
             }
           }
-        } catch (photoError) {
-          console.error('Photo upload error:', photoError);
+        } catch {
           // 写真のアップロードに失敗しても続行
         }
       }
@@ -342,10 +339,10 @@ const Estimate = () => {
         
         // 予約ページに遷移（estimate_idを渡す）
         navigate(`/reservation?estimate_id=${data.id}`);
-      } catch (dbError: any) {
+      } catch (dbError: unknown) {
         // Supabaseが設定されていない場合、ローカルストレージに保存して続行
-        if (dbError.message?.includes('fetch') || dbError.message?.includes('network')) {
-          console.warn('Supabase not configured, saving to localStorage');
+        const errorMessage = dbError instanceof Error ? dbError.message : '';
+        if (errorMessage.includes('fetch') || errorMessage.includes('network')) {
           const estimateData = {
             id: `local_${Date.now()}`,
             building_type: formData.buildingType,
@@ -373,11 +370,11 @@ const Estimate = () => {
         }
       }
       
-    } catch (error: any) {
-      console.error('Error:', error);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "見積もりの保存に失敗しました。もう一度お試しください。";
       toast({
         title: "エラーが発生しました",
-        description: error.message || "見積もりの保存に失敗しました。もう一度お試しください。",
+        description: message,
         variant: "destructive",
       });
     } finally {

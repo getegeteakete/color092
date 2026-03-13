@@ -49,6 +49,19 @@ interface Estimate {
   updated_at?: string;
 }
 
+interface Reservation {
+  id: string;
+  estimate_id: string;
+  type: "現地調査" | "Zoomオンライン相談";
+  date?: string;
+  time?: string;
+  address?: string;
+  notes?: string;
+  zoom_url?: string;
+  status?: string;
+  created_at: string;
+}
+
 const STATUS_CONFIG: Record<Status, { color: string; bgColor: string; label: string }> = {
   仮見積: { color: "text-blue-600", bgColor: "bg-blue-50 dark:bg-blue-900/20", label: "仮見積" },
   予約済: { color: "text-purple-600", bgColor: "bg-purple-50 dark:bg-purple-900/20", label: "予約済" },
@@ -63,6 +76,7 @@ const AdminDetail = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [estimate, setEstimate] = useState<Estimate | null>(null);
+  const [reservation, setReservation] = useState<Reservation | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -101,11 +115,11 @@ const AdminDetail = () => {
         memo: data.memo || "",
         sales_notes: data.sales_notes || "",
       });
-    } catch (error: any) {
-      console.error("Error loading estimate:", error);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "案件の読み込みに失敗しました。";
       toast({
         title: "エラー",
-        description: "案件の読み込みに失敗しました。",
+        description: message,
         variant: "destructive",
       });
       navigate("/admin/list");
@@ -128,8 +142,8 @@ const AdminDetail = () => {
 
       if (error) throw error;
       setReservation(data);
-    } catch (error: any) {
-      console.error("Error loading reservation:", error);
+    } catch {
+      // 予約情報は任意のため、エラーは無視
     }
   };
 
@@ -163,7 +177,7 @@ const AdminDetail = () => {
 
       setIsEditing(false);
       loadEstimate();
-    } catch (error: any) {
+    } catch {
       toast({
         title: "エラー",
         description: "保存に失敗しました。",

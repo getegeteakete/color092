@@ -73,8 +73,7 @@ const AdminList = () => {
 
       if (error) throw error;
       setEstimates(data || []);
-    } catch (error: any) {
-      console.error("Error loading estimates:", error);
+    } catch {
       toast({
         title: "エラー",
         description: "案件の読み込みに失敗しました。",
@@ -140,7 +139,7 @@ const AdminList = () => {
       });
 
       loadEstimates();
-    } catch (error: any) {
+    } catch {
       toast({
         title: "エラー",
         description: "ステータスの更新に失敗しました。",

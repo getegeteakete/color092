@@ -121,3 +121,121 @@ CREATE POLICY "Allow public access" ON storage.objects
 3. フロントエンドからバックエンドAPIを呼び出す
 
 セキュリティ上の理由から、Zoom APIの認証情報はサーバーサイドで管理してください。
+
+---
+
+## 7. works / news テーブルの追加
+
+Supabase の SQL Editor で以下を実行してください：
+
+```sql
+-- ── works テーブル（施工実績） ─────────────────────────────────────
+CREATE TABLE works (
+  id          UUID        DEFAULT gen_random_uuid() PRIMARY KEY,
+  title       TEXT        NOT NULL,
+  category    TEXT        NOT NULL DEFAULT 'painting'
+                          CHECK (category IN ('painting', 'reform')),
+  description TEXT,
+  location    TEXT,
+  image_urls  TEXT[]      DEFAULT '{}',
+  published   BOOLEAN     NOT NULL DEFAULT false,
+  created_at  TIMESTAMPTZ DEFAULT NOW(),
+  updated_at  TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE works ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Allow all operations" ON works FOR ALL USING (true) WITH CHECK (true);
+
+-- ── news テーブル（お知らせ） ──────────────────────────────────────
+CREATE TABLE news (
+  id           UUID        DEFAULT gen_random_uuid() PRIMARY KEY,
+  title        TEXT        NOT NULL,
+  category     TEXT        NOT NULL DEFAULT 'お知らせ',
+  excerpt      TEXT,
+  content      TEXT,
+  published    BOOLEAN     NOT NULL DEFAULT false,
+  published_at TIMESTAMPTZ,
+  created_at   TIMESTAMPTZ DEFAULT NOW(),
+  updated_at   TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE news ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Allow all operations" ON news FOR ALL USING (true) WITH CHECK (true);
+
+-- ── works-images ストレージバケット ───────────────────────────────
+-- Supabase Dashboard > Storage > New bucket
+--   Name: works-images
+--   Public: ON（チェックを入れる）
+-- 作成後に SQL Editor で実行：
+
+CREATE POLICY "Allow public uploads" ON storage.objects
+  FOR INSERT WITH CHECK (bucket_id = 'works-images');
+
+CREATE POLICY "Allow public access" ON storage.objects
+  FOR SELECT USING (bucket_id = 'works-images');
+```
+
+---
+
+## 7. CMS テーブルの作成（施工実績・お知らせ）
+
+管理画面から施工実績・お知らせを投稿するために、以下のSQLを実行してください。
+
+```sql
+-- works テーブル（施工実績）
+CREATE TABLE works (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  title TEXT NOT NULL,
+  category TEXT NOT NULL DEFAULT 'painting'
+    CHECK (category IN ('painting', 'reform')),
+  description TEXT DEFAULT '',
+  location TEXT DEFAULT '',
+  image_urls TEXT[] DEFAULT '{}',
+  published BOOLEAN NOT NULL DEFAULT false,
+  published_at TIMESTAMP WITH TIME ZONE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+ALTER TABLE works ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Allow all operations on works" ON works
+  FOR ALL USING (true) WITH CHECK (true);
+
+-- news テーブル（お知らせ）
+CREATE TABLE news (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  title TEXT NOT NULL,
+  category TEXT NOT NULL DEFAULT 'お知らせ'
+    CHECK (category IN ('お知らせ', 'キャンペーン', 'メディア')),
+  excerpt TEXT DEFAULT '',
+  content TEXT DEFAULT '',
+  published BOOLEAN NOT NULL DEFAULT false,
+  published_at TIMESTAMP WITH TIME ZONE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+ALTER TABLE news ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Allow all operations on news" ON news
+  FOR ALL USING (true) WITH CHECK (true);
+```
+
+## 8. CMSメディア用 Storage バケットの作成
+
+施工写真のアップロード用バケットを作成してください。
+
+1. Supabase Dashboard > Storage に移動
+2. 「New bucket」をクリック
+3. バケット名: `cms-images`、**Public** に設定して作成
+4. SQL Editorで以下を実行：
+
+```sql
+CREATE POLICY "Allow public uploads to cms-images" ON storage.objects
+  FOR INSERT WITH CHECK (bucket_id = 'cms-images');
+
+CREATE POLICY "Allow public access to cms-images" ON storage.objects
+  FOR SELECT USING (bucket_id = 'cms-images');
+
+CREATE POLICY "Allow delete from cms-images" ON storage.objects
+  FOR DELETE USING (bucket_id = 'cms-images');
+```

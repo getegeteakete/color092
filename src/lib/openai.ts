@@ -122,9 +122,9 @@ JSON形式で回答してください：
       analysis: content.analysis || '分析を完了しました。',
       confidence: content.confidence || 0.7,
     };
-  } catch (error: any) {
-    console.error('Photo analysis error:', error);
-    throw new Error(error.message || '写真の分析に失敗しました');
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "写真の分析に失敗しました";
+    throw new Error(message);
   }
 };
 
@@ -246,8 +246,8 @@ ${photoAnalysis ? `- AI分析結果: ${photoAnalysis.deteriorationLevel} (信頼
       breakdown: content.breakdown || [],
       aiNotes: content.aiNotes || '',
     };
-  } catch (error: any) {
-    console.error('AI estimate calculation error:', error);
-    throw new Error(error.message || 'AI見積もりの計算に失敗しました');
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "AI見積もりの計算に失敗しました";
+    throw new Error(message);
   }
 };

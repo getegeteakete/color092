@@ -32,12 +32,23 @@ const STATUS_CONFIG: Record<Status, { color: string; bgColor: string; label: str
   失注: { color: "text-red-600", bgColor: "bg-red-50 dark:bg-red-900/20", label: "失注" },
 };
 
+interface RecentEstimate {
+  id: string;
+  building_type: string;
+  floor_area: number;
+  estimate_min: number;
+  estimate_max: number;
+  status: Status;
+  customer_name?: string;
+  created_at: string;
+}
+
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [statusCounts, setStatusCounts] = useState<StatusCount[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [recentEstimates, setRecentEstimates] = useState<any[]>([]);
+  const [recentEstimates, setRecentEstimates] = useState<RecentEstimate[]>([]);
 
   useEffect(() => {
     loadDashboardData();
@@ -87,8 +98,8 @@ const AdminDashboard = () => {
 
       if (recentError) throw recentError;
       setRecentEstimates(recent || []);
-    } catch (error: any) {
-      console.error("Error loading dashboard data:", error);
+    } catch {
+      // データ読み込みエラーは静かに失敗（UI側でローディング終了）
     } finally {
       setIsLoading(false);
     }

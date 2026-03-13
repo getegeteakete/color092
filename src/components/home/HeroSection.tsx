@@ -39,8 +39,9 @@ export const HeroSection = () => {
               <Link
                 to="/works"
                 className="inline-flex items-center justify-center gap-2 rounded-full border-2 font-medium transition-all hover:scale-105"
-                style={{ padding: "12px 20px", fontSize: "14px" }}
                 style={{
+                  padding: "12px 20px",
+                  fontSize: "14px",
                   borderColor: "hsl(var(--accent-4))",
                   color: "hsl(var(--accent-4))",
                 }}
