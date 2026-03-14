@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Plus, Pencil, Trash2, Eye, EyeOff, Image, Search } from "lucide-react";
 import { supabase } from "@/lib/supabase";
-import AdminLayout from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
@@ -84,7 +83,7 @@ const AdminWorks = () => {
   );
 
   return (
-    <AdminLayout>
+
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
@@ -206,7 +205,7 @@ const AdminWorks = () => {
           </div>
         )}
       </div>
-    </AdminLayout>
+
   );
 };
 

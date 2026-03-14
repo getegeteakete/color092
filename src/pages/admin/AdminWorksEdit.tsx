@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, Upload, X, Loader2, GripVertical } from "lucide-react";
 import { supabase } from "@/lib/supabase";
-import AdminLayout from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -125,16 +124,16 @@ const AdminWorksEdit = () => {
 
   if (isLoading) {
     return (
-      <AdminLayout>
+  
         <div className="flex justify-center py-16">
           <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary" />
         </div>
-      </AdminLayout>
+  
     );
   }
 
   return (
-    <AdminLayout>
+
       <div className="max-w-3xl space-y-8">
         {/* ヘッダー */}
         <div className="flex items-center gap-4">
@@ -271,7 +270,7 @@ const AdminWorksEdit = () => {
           </Button>
         </div>
       </div>
-    </AdminLayout>
+
   );
 };
 

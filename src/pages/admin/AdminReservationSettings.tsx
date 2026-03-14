@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import AdminLayout from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -125,18 +124,18 @@ const AdminReservationSettings = () => {
 
   if (isLoading) {
     return (
-      <AdminLayout>
+  
         <div className="flex items-center justify-center h-64">
           <p className="text-muted-foreground">読み込み中...</p>
         </div>
-      </AdminLayout>
+  
     );
   }
 
   const slots = previewSlots();
 
   return (
-    <AdminLayout>
+
       <div className="max-w-3xl mx-auto space-y-8">
         {/* ヘッダー */}
         <div className="flex items-center justify-between">
@@ -356,7 +355,7 @@ ALTER TABLE reservations ADD COLUMN IF NOT EXISTS time2 TEXT;`}
           </Button>
         </div>
       </div>
-    </AdminLayout>
+
   );
 };
 
